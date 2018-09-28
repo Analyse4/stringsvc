@@ -9,12 +9,13 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 type StringService interface {
 	Uppercase(string) (string, error)
-	Count(string) int
+	Count(string) string
 }
 
 type stringservice struct{}
@@ -26,8 +27,8 @@ func (stringservice) Uppercase(s string) (string, error) {
 	return strings.ToUpper(s), nil
 }
 
-func (stringservice) Count(s string) int {
-	return len(s)
+func (stringservice) Count(s string) string {
+	return strconv.Itoa(len(s))
 }
 
 // ErrEmpty is returned when input string is empty
@@ -48,7 +49,7 @@ type countRequest struct {
 }
 
 type countResponse struct {
-	V int `json:"v"`
+	V string `json:"v"`
 }
 
 func makeUppercaseEndpoint(svc StringService) endpoint.Endpoint {
@@ -88,7 +89,7 @@ func main() {
 	http.Handle("/uppercase", uppercaseHandler)
 	http.Handle("/count", countHandler)
 
-	log.Fatal(http.ListenAndServe(":9000", nil))
+	log.Fatal(http.ListenAndServe(":9001", nil))
 }
 
 func decodeUppercaseRequest(_ context.Context, r *http.Request) (interface{}, error) {

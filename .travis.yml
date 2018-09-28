@@ -1,0 +1,13 @@
+language: go
+
+go:
+#  - "1.x"
+#  - "1.8"
+  - "1.10.x"
+  - master
+
+go_import_path:
+- "github.com/go-kit/kit/endpoint"
+- "github.com/go-kit/kit/transport/http"
+
+
