@@ -11,3 +11,4 @@ go_import_path:
 - "github.com/go-kit/kit/transport/http"
 
 
+script: go get -t github.com/go-kit/kit/endpoint && go get -t github.com/go-kit/kit/transport/http
