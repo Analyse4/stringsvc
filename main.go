@@ -52,7 +52,7 @@ type countResponse struct {
 }
 
 func makeUppercaseEndpoint(svc StringService) endpoint.Endpoint {
-	return func(_ context.Context, request interface{}) (response interface{}, err error) {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(uppercaseRequest)
 		v, err := svc.Uppercase(req.S)
 		if err != nil {
@@ -63,7 +63,7 @@ func makeUppercaseEndpoint(svc StringService) endpoint.Endpoint {
 }
 
 func makeCountEndpoint(svc StringService) endpoint.Endpoint {
-	return func(_ context.Context, request interface{}) (response interface{}, err error) {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(countRequest)
 		v := svc.Count(req.S)
 		return countResponse{v}, nil
@@ -93,23 +93,20 @@ func main() {
 
 func decodeUppercaseRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var request uppercaseRequest
-	if err := json.NewDecoder(r.Body).Decode(request); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
 	return request, nil
 }
 
 func decodeCountRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var request countResponse
-	if err := json.NewDecoder(r.Body).Decode(request); err != nil {
+	var request countRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
 	}
 	return request, nil
 }
 
 func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		return err
-	}
-	return nil
+	return json.NewEncoder(w).Encode(response)
 }
