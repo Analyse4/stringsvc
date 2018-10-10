@@ -21,7 +21,7 @@ func main() {
 		Name:      "request_count",
 		Help:      "Number of request received",
 	}, fieldKeys)
-	requestLantency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
+	requestLatency := kitprometheus.NewSummaryFrom(stdprometheus.SummaryOpts{
 		Namespace: "my_group",
 		Subsystem: "string_service",
 		Name:      "request_latency_microseconds",
@@ -37,7 +37,7 @@ func main() {
 	var svc StringService
 	svc = stringservice{}
 	svc = loggingMiddleware{logger, svc}
-	svc = instrumentingMiddleware{requestCount, requestLantency, countResult, svc}
+	svc = instrumentingMiddleware{requestCount, requestLatency, countResult, svc}
 
 	uppercaseHandler := httptransport.NewServer(
 		makeUppercaseEndpoint(svc),
