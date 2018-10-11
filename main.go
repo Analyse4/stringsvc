@@ -55,6 +55,6 @@ func main() {
 	http.Handle("/count", countHandler)
 	http.Handle("/metrics", promhttp.Handler())
 
-	logger.Log("msg", "HTTP", "addr", ":8080")
+	logger.Log("msg", "HTTP", "addr", ":9001")
 	logger.Log("err", http.ListenAndServe(":9001", nil))
 }
